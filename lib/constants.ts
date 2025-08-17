@@ -1,22 +1,70 @@
 // Smart Contract Configuration
-export const GIFT_BOX_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"; // Placeholder
+export const GIFT_BOX_CONTRACT_ADDRESS = "0x6802ec0997148cd10257c449702E900405c64cbC"; // GiftBoxV2 on Sepolia
 
 export const GIFT_BOX_ABI = [
-  // createGift function
+  // createGiftETH function
   {
     "inputs": [
-      {"internalType": "address", "name": "_recipient", "type": "address"},
-      {"internalType": "uint256", "name": "_unlockTimestamp", "type": "uint256"}
+      {"internalType": "address", "name": "recipient", "type": "address"},
+      {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+      {"internalType": "string", "name": "recipientENS", "type": "string"},
+      {"internalType": "string", "name": "message", "type": "string"}
     ],
-    "name": "createGift",
-    "outputs": [{"internalType": "uint256", "name": "giftId", "type": "uint256"}],
+    "name": "createGiftETH",
+    "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  // createGiftToken function
+  {
+    "inputs": [
+      {"internalType": "address", "name": "recipient", "type": "address"},
+      {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"},
+      {"internalType": "string", "name": "recipientENS", "type": "string"},
+      {"internalType": "string", "name": "message", "type": "string"}
+    ],
+    "name": "createGiftToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // createGiftERC721 function
+  {
+    "inputs": [
+      {"internalType": "address", "name": "recipient", "type": "address"},
+      {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "tokenId", "type": "uint256"},
+      {"internalType": "string", "name": "recipientENS", "type": "string"},
+      {"internalType": "string", "name": "message", "type": "string"}
+    ],
+    "name": "createGiftERC721",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // createGiftERC1155 function
+  {
+    "inputs": [
+      {"internalType": "address", "name": "recipient", "type": "address"},
+      {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+      {"internalType": "address", "name": "token", "type": "address"},
+      {"internalType": "uint256", "name": "tokenId", "type": "uint256"},
+      {"internalType": "uint256", "name": "amount", "type": "uint256"},
+      {"internalType": "string", "name": "recipientENS", "type": "string"},
+      {"internalType": "string", "name": "message", "type": "string"}
+    ],
+    "name": "createGiftERC1155",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   // claimGift function
   {
     "inputs": [
-      {"internalType": "uint256", "name": "_giftId", "type": "uint256"}
+      {"internalType": "uint256", "name": "id", "type": "uint256"}
     ],
     "name": "claimGift",
     "outputs": [],
@@ -26,7 +74,7 @@ export const GIFT_BOX_ABI = [
   // getGiftDetails function
   {
     "inputs": [
-      {"internalType": "uint256", "name": "_giftId", "type": "uint256"}
+      {"internalType": "uint256", "name": "id", "type": "uint256"}
     ],
     "name": "getGiftDetails",
     "outputs": [
@@ -34,11 +82,16 @@ export const GIFT_BOX_ABI = [
         "components": [
           {"internalType": "address", "name": "sender", "type": "address"},
           {"internalType": "address", "name": "recipient", "type": "address"},
-          {"internalType": "uint256", "name": "amount", "type": "uint256"},
           {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
-          {"internalType": "bool", "name": "claimed", "type": "bool"}
+          {"internalType": "bool", "name": "claimed", "type": "bool"},
+          {"internalType": "uint8", "name": "assetType", "type": "uint8"},
+          {"internalType": "address", "name": "token", "type": "address"},
+          {"internalType": "uint256", "name": "tokenId", "type": "uint256"},
+          {"internalType": "uint256", "name": "amount", "type": "uint256"},
+          {"internalType": "string", "name": "recipientENS", "type": "string"},
+          {"internalType": "string", "name": "message", "type": "string"}
         ],
-        "internalType": "struct GiftBox.Gift",
+        "internalType": "struct GiftBoxV2.Gift",
         "name": "",
         "type": "tuple"
       }
@@ -46,14 +99,76 @@ export const GIFT_BOX_ABI = [
     "stateMutability": "view",
     "type": "function"
   },
-  // getUserGifts function
+  // getSentGifts function
   {
     "inputs": [
-      {"internalType": "address", "name": "_user", "type": "address"}
+      {"internalType": "address", "name": "sender", "type": "address"}
     ],
-    "name": "getUserGifts",
+    "name": "getSentGifts",
     "outputs": [
       {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // getReceivedGifts function
+  {
+    "inputs": [
+      {"internalType": "address", "name": "recipient", "type": "address"}
+    ],
+    "name": "getReceivedGifts",
+    "outputs": [
+      {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // getGiftsByENS function
+  {
+    "inputs": [
+      {"internalType": "string", "name": "ensName", "type": "string"}
+    ],
+    "name": "getGiftsByENS",
+    "outputs": [
+      {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // getMultipleGifts function
+  {
+    "inputs": [
+      {"internalType": "uint256[]", "name": "ids", "type": "uint256[]"}
+    ],
+    "name": "getMultipleGifts",
+    "outputs": [
+      {
+        "components": [
+          {"internalType": "address", "name": "sender", "type": "address"},
+          {"internalType": "address", "name": "recipient", "type": "address"},
+          {"internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+          {"internalType": "bool", "name": "claimed", "type": "bool"},
+          {"internalType": "uint8", "name": "assetType", "type": "uint8"},
+          {"internalType": "address", "name": "token", "type": "address"},
+          {"internalType": "uint256", "name": "tokenId", "type": "uint256"},
+          {"internalType": "uint256", "name": "amount", "type": "uint256"},
+          {"internalType": "string", "name": "recipientENS", "type": "string"},
+          {"internalType": "string", "name": "message", "type": "string"}
+        ],
+        "internalType": "struct GiftBoxV2.Gift[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // nextId view function
+  {
+    "inputs": [],
+    "name": "nextId",
+    "outputs": [
+      {"internalType": "uint256", "name": "", "type": "uint256"}
     ],
     "stateMutability": "view",
     "type": "function"
@@ -62,11 +177,15 @@ export const GIFT_BOX_ABI = [
   {
     "anonymous": false,
     "inputs": [
-      {"indexed": true, "internalType": "uint256", "name": "giftId", "type": "uint256"},
+      {"indexed": true, "internalType": "uint256", "name": "id", "type": "uint256"},
       {"indexed": true, "internalType": "address", "name": "sender", "type": "address"},
       {"indexed": true, "internalType": "address", "name": "recipient", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"},
+      {"indexed": false, "internalType": "uint8", "name": "assetType", "type": "uint8"},
+      {"indexed": false, "internalType": "address", "name": "token", "type": "address"},
+      {"indexed": false, "internalType": "uint256", "name": "tokenId", "type": "uint256"},
       {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
-      {"indexed": false, "internalType": "uint256", "name": "unlockTimestamp", "type": "uint256"}
+      {"indexed": false, "internalType": "string", "name": "recipientENS", "type": "string"}
     ],
     "name": "GiftCreated",
     "type": "event"
@@ -74,7 +193,7 @@ export const GIFT_BOX_ABI = [
   {
     "anonymous": false,
     "inputs": [
-      {"indexed": true, "internalType": "uint256", "name": "giftId", "type": "uint256"},
+      {"indexed": true, "internalType": "uint256", "name": "id", "type": "uint256"},
       {"indexed": true, "internalType": "address", "name": "recipient", "type": "address"}
     ],
     "name": "GiftClaimed",

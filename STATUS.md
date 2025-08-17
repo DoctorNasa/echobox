@@ -1,10 +1,10 @@
-# STATUS.md - ENS GiftBox Project Status
+# STATUS.md - EchoBox Project Status
 
 ## 📊 Project Overview
-**Project Name:** ENS GiftBox (EchoBox)  
-**Hackathon:** ETHGlobal NY  
-**Start Time:** January 16, 2025  
-**Deadline:** 48 hours from start  
+**Project Name:** EchoBox (EchoBox)
+**Hackathon:** ETHGlobal NY
+**Start Time:** January 16, 2025
+**Deadline:** 48 hours from start
 **Current Phase:** Project Setup Complete ✅
 
 ## 🏆 Prize Targets & Strategy
@@ -23,11 +23,11 @@
 - **Privy Wallet Integration**
   - Status: ✅ Complete
   - Strategy: Demo page at `/demo/privy` with modern Web3 UX
-  
+
 - **Coinbase Smart Wallet Support**
-  - Status: ✅ Complete  
+  - Status: ✅ Complete
   - Strategy: Demo page at `/demo/coinbase` with Smart Wallet integration
-  
+
 - **Nora AI Integration**
   - Status: 🔴 Not Started
   - Strategy: Use for smart contract development assistance
@@ -188,8 +188,8 @@
 - Polish & Documentation: 75%
 
 ## 🔄 Last Updated
-**Date:** January 16, 2025  
-**Time:** 17:15 UTC  
+**Date:** January 16, 2025
+**Time:** 17:15 UTC
 **Phase:** Smart Contract ✓ | Demo Pages ✓ | Core Frontend Next
 
 ---

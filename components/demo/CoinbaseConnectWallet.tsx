@@ -1,10 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useCoinbaseWallet } from '../providers/CoinbaseWalletProvider';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Wallet, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import React from "react";
+import { useCoinbaseWallet } from "../providers/CoinbaseWalletProvider";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Wallet, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 export function CoinbaseConnectWallet() {
   const { wallet, connect, disconnect } = useCoinbaseWallet();
@@ -121,7 +127,7 @@ export function CoinbaseConnectWallet() {
             <li>✅ Smart Wallet Integration</li>
             <li>✅ Sepolia Testnet</li>
             <li>✅ Auto Network Switching</li>
-            <li>✅ ENS GiftBox Compatible</li>
+            <li>✅ EchoBox Compatible</li>
           </ul>
         </CardContent>
       </Card>

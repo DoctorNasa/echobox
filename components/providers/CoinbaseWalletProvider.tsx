@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
-import { sepolia } from 'viem/chains';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import { sepolia } from "viem/chains";
 
 interface WalletState {
   isConnected: boolean;
@@ -17,13 +17,17 @@ interface CoinbaseWalletContextType {
   disconnect: () => void;
 }
 
-const CoinbaseWalletContext = createContext<CoinbaseWalletContextType | null>(null);
+const CoinbaseWalletContext = createContext<CoinbaseWalletContextType | null>(
+  null,
+);
 
 interface CoinbaseWalletProviderProps {
   children: React.ReactNode;
 }
 
-export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps) {
+export function CoinbaseWalletProvider({
+  children,
+}: CoinbaseWalletProviderProps) {
   const [wallet, setWallet] = useState<WalletState>({
     isConnected: false,
     isConnecting: false,
@@ -34,19 +38,21 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
   useEffect(() => {
     // Initialize Coinbase Wallet SDK
     const sdk = new CoinbaseWalletSDK({
-      appName: 'ENS GiftBox',
-      appLogoUrl: 'https://raw.githubusercontent.com/ethereum/ens-app-v3/main/public/android-chrome-192x192.png',
+      appName: "EchoBox",
+      appLogoUrl:
+        "https://i.postimg.cc/VzYzhXL8/Chat-GPT-Image-16-2568-16-43-31.png",
       darkMode: false,
     });
 
     const provider = sdk.makeWeb3Provider({
-      options: 'smartWalletOnly' // Use smart wallet only for demo
+      options: "smartWalletOnly", // Use smart wallet only for demo
     });
 
     setCoinbaseWallet(provider);
 
     // Check if already connected
-    provider.request({ method: 'eth_accounts' })
+    provider
+      .request({ method: "eth_accounts" })
       .then((accounts: string[]) => {
         if (accounts.length > 0) {
           setWallet({
@@ -59,7 +65,7 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
       .catch(console.error);
 
     // Listen for account changes
-    provider.on('accountsChanged', (accounts: string[]) => {
+    provider.on("accountsChanged", (accounts: string[]) => {
       if (accounts.length > 0) {
         setWallet({
           isConnected: true,
@@ -75,8 +81,8 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
     });
 
     // Listen for chain changes
-    provider.on('chainChanged', (chainId: string) => {
-      console.log('Chain changed:', chainId);
+    provider.on("chainChanged", (chainId: string) => {
+      console.log("Chain changed:", chainId);
     });
 
     return () => {
@@ -88,36 +94,38 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
     if (!coinbaseWallet) return;
 
     try {
-      setWallet(prev => ({ ...prev, isConnecting: true, error: undefined }));
+      setWallet((prev) => ({ ...prev, isConnecting: true, error: undefined }));
 
       // Request account access
       const accounts = await coinbaseWallet.request({
-        method: 'eth_requestAccounts',
+        method: "eth_requestAccounts",
       });
 
       if (accounts.length > 0) {
         // Switch to Sepolia network
         try {
           await coinbaseWallet.request({
-            method: 'wallet_switchEthereumChain',
+            method: "wallet_switchEthereumChain",
             params: [{ chainId: `0x${sepolia.id.toString(16)}` }],
           });
         } catch (switchError: any) {
           // If chain doesn't exist, add it
           if (switchError.code === 4902) {
             await coinbaseWallet.request({
-              method: 'wallet_addEthereumChain',
-              params: [{
-                chainId: `0x${sepolia.id.toString(16)}`,
-                chainName: 'Sepolia Test Network',
-                nativeCurrency: {
-                  name: 'Sepolia ETH',
-                  symbol: 'ETH',
-                  decimals: 18,
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: `0x${sepolia.id.toString(16)}`,
+                  chainName: "Sepolia Test Network",
+                  nativeCurrency: {
+                    name: "Sepolia ETH",
+                    symbol: "ETH",
+                    decimals: 18,
+                  },
+                  rpcUrls: ["https://sepolia.infura.io/v3/"],
+                  blockExplorerUrls: ["https://sepolia.etherscan.io/"],
                 },
-                rpcUrls: ['https://sepolia.infura.io/v3/'],
-                blockExplorerUrls: ['https://sepolia.etherscan.io/'],
-              }],
+              ],
             });
           }
         }
@@ -129,11 +137,11 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
         });
       }
     } catch (error: any) {
-      console.error('Failed to connect:', error);
+      console.error("Failed to connect:", error);
       setWallet({
         isConnected: false,
         isConnecting: false,
-        error: error.message || 'Failed to connect wallet',
+        error: error.message || "Failed to connect wallet",
       });
     }
   };
@@ -164,7 +172,9 @@ export function CoinbaseWalletProvider({ children }: CoinbaseWalletProviderProps
 export const useCoinbaseWallet = () => {
   const context = useContext(CoinbaseWalletContext);
   if (!context) {
-    throw new Error('useCoinbaseWallet must be used within CoinbaseWalletProvider');
+    throw new Error(
+      "useCoinbaseWallet must be used within CoinbaseWalletProvider",
+    );
   }
   return context;
 };

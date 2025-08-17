@@ -1,11 +1,24 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { usePrivy } from '@privy-io/react-auth';
-import { useAccount } from 'wagmi';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Wallet, CheckCircle, AlertCircle, Mail, User, Loader2 } from 'lucide-react';
+import React from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import { useAccount } from "wagmi";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import {
+  Wallet,
+  CheckCircle,
+  AlertCircle,
+  Mail,
+  User,
+  Loader2,
+} from "lucide-react";
 
 export function PrivyConnectWallet() {
   const { ready, authenticated, login, logout, user } = usePrivy();
@@ -63,10 +76,12 @@ export function PrivyConnectWallet() {
               {displayEmail && (
                 <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
                   <span className="text-sm font-medium">Email:</span>
-                  <span className="text-sm text-purple-700">{displayEmail}</span>
+                  <span className="text-sm text-purple-700">
+                    {displayEmail}
+                  </span>
                 </div>
               )}
-              
+
               {displayAddress && (
                 <div className="flex items-center justify-between p-3 rounded-lg bg-green-50">
                   <span className="text-sm font-medium">Wallet:</span>
@@ -75,7 +90,7 @@ export function PrivyConnectWallet() {
                   </code>
                 </div>
               )}
-              
+
               <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50">
                 <span className="text-sm font-medium">Network:</span>
                 <span className="text-sm text-blue-700">Sepolia Testnet</span>
@@ -130,7 +145,7 @@ export function PrivyConnectWallet() {
             <li>✅ Embedded Wallet Creation</li>
             <li>✅ Smart Wallet Support</li>
             <li>✅ Multi-Wallet Connection</li>
-            <li>✅ ENS GiftBox Integration</li>
+            <li>✅ EchoBox Integration</li>
           </ul>
         </CardContent>
       </Card>

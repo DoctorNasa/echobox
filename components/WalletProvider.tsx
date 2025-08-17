@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { PrivyProvider } from '@privy-io/react-auth';
-import { WagmiProvider, createConfig } from '@privy-io/wagmi';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { sepolia } from 'viem/chains';
-import { http } from 'viem';
+import React from "react";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { WagmiProvider, createConfig } from "@privy-io/wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { sepolia } from "viem/chains";
+import { http } from "viem";
 
 interface WalletProviderProps {
   children: React.ReactNode;
@@ -25,41 +25,43 @@ const queryClient = new QueryClient();
 export function WalletProvider({ children }: WalletProviderProps) {
   return (
     <PrivyProvider
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || 'clzerb9o8003nvtap1ykrtgmr'}
+      appId={
+        process.env.NEXT_PUBLIC_PRIVY_APP_ID || "cmeegzyir01tyl90b0vc99msz"
+      }
       config={{
-        loginMethods: ['email', 'wallet'],
+        loginMethods: ["email", "wallet"],
         appearance: {
-          theme: 'light',
-          accentColor: '#9333ea', // Purple to match our theme
-          logo: 'https://raw.githubusercontent.com/ethereum/ens-app-v3/main/public/android-chrome-192x192.png',
+          theme: "light",
+          accentColor: "#9333ea", // Purple to match our theme
+          logo: "https://i.postimg.cc/VzYzhXL8/Chat-GPT-Image-16-2568-16-43-31.png",
           walletList: [
-            'coinbase_wallet',
-            'metamask', 
-            'wallet_connect',
-            'rainbow',
-            'phantom'
+            "coinbase_wallet",
+            "metamask",
+            "wallet_connect",
+            "rainbow",
+            "phantom",
           ],
           showWalletLoginFirst: false, // Show email first, then wallet options
         },
         embeddedWallets: {
-          createOnLogin: 'users-without-wallets',
+          createOnLogin: "users-without-wallets",
           noPromptOnSignature: false,
         },
         externalWallets: {
           coinbaseWallet: {
             // Use smart wallets only for better UX and gasless transactions
-            connectionOptions: 'smartWalletOnly'
+            connectionOptions: "smartWalletOnly",
           },
           metamask: {
-            connectionOptions: 'all'
-          }
+            connectionOptions: "all",
+          },
         },
         // Enable smart wallets for better UX
         smartWallets: {
-          createOnLogin: 'users-without-wallets',
+          createOnLogin: "users-without-wallets",
         },
         // Customize the modal
-        modalSize: 'compact',
+        modalSize: "compact",
         legal: {
           termsAndConditionsUrl: undefined,
           privacyPolicyUrl: undefined,
@@ -67,9 +69,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>
-          {children}
-        </WagmiProvider>
+        <WagmiProvider config={config}>{children}</WagmiProvider>
       </QueryClientProvider>
     </PrivyProvider>
   );

@@ -1,5 +1,8 @@
+import type { TokenMeta } from '@/types/asset';
+
 // Contract Addresses
 export const ECHOBOX_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_ECHOBOX_CONTRACT_ADDRESS || "0xb5aa12ccb861827a0d2daf47082780247a6d254e";
+export const GIFTBOX_V2_ADDRESS = process.env.NEXT_PUBLIC_GIFTBOX_V2_ADDRESS || "0x6802ec0997148cd10257c449702E900405c64cbC";
 export const PYUSD_ADDRESS_SEPOLIA = process.env.NEXT_PUBLIC_PYUSD_ADDRESS_SEPOLIA || "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7a9c";
 
 // Chain Configuration
@@ -9,7 +12,46 @@ export const SUPPORTED_CHAINS = [SEPOLIA_CHAIN_ID];
 // Contract ABI
 export { default as ECHOBOX_ABI } from './EchoBoxABI.json';
 
-// Token Configuration
+// Enhanced Token Registry for Multi-Asset Support
+export const TOKEN_LIST: TokenMeta[] = [
+  { 
+    symbol: "ETH",  
+    name: "Ethereum",
+    address: null, 
+    decimals: 18, 
+    icon: "/tokens/eth.svg" 
+  },
+  { 
+    symbol: "PYUSD",
+    name: "PayPal USD", 
+    address: PYUSD_ADDRESS_SEPOLIA as `0x${string}`, 
+    decimals: 6, 
+    icon: "/tokens/pyusd.svg" 
+  },
+  { 
+    symbol: "USDC", 
+    name: "USD Coin",
+    address: "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8" as `0x${string}`, // Sepolia USDC
+    decimals: 6, 
+    icon: "/tokens/usdc.svg" 
+  },
+  { 
+    symbol: "WETH", 
+    name: "Wrapped Ether",
+    address: "0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c" as `0x${string}`, // Sepolia WETH
+    decimals: 18, 
+    icon: "/tokens/weth.svg" 
+  },
+  { 
+    symbol: "DAI", 
+    name: "DAI Stablecoin",
+    address: "0x68194a729C2450ad26072b3D33ADaCbcef39D574" as `0x${string}`, // Sepolia DAI
+    decimals: 18, 
+    icon: "/tokens/dai.svg" 
+  },
+];
+
+// Legacy TOKENS object for backward compatibility
 export const TOKENS = {
   ETH: {
     symbol: 'ETH',
@@ -21,7 +63,7 @@ export const TOKENS = {
   PYUSD: {
     symbol: 'PYUSD',
     name: 'PayPal USD',
-    decimals: 6, // PYUSD typically uses 6 decimals
+    decimals: 6,
     address: PYUSD_ADDRESS_SEPOLIA,
     isNative: false,
   },

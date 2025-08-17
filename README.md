@@ -15,10 +15,11 @@ A decentralized application for sending time-locked cryptocurrency gifts for bir
 
 ## 🚀 Live Deployment
 
-**✅ Smart Contract Deployed on Sepolia Testnet**
-- **Contract Address:** `0x41F3cAb3eAa961478CC19008deb8AC615d07d642`
-- **Etherscan:** [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x41F3cAb3eAa961478CC19008deb8AC615d07d642#code)
+**✅ GiftBoxV2 Smart Contract Deployed on Sepolia Testnet**
+- **Contract Address:** `0x6802ec0997148cd10257c449702E900405c64cbC`
+- **Explorer:** [View on RoutesScan](https://testnet.routescan.io/address/0x6802ec0997148cd10257c449702E900405c64cbC/contract/11155111/writeContract?chainid=11155111)
 - **Status:** Verified and ready for testing
+- **Enhanced Features:** Multi-asset support (ETH, ERC20, ERC721, ERC1155)
 
 ## 🛠️ Tech Stack
 
@@ -77,7 +78,7 @@ Fill in your environment variables:
 ```env
 NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_api_key
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_walletconnect_project_id
-NEXT_PUBLIC_GIFTBOX_CONTRACT_ADDRESS=0x41F3cAb3eAa961478CC19008deb8AC615d07d642
+NEXT_PUBLIC_GIFTBOX_CONTRACT_ADDRESS=0x6802ec0997148cd10257c449702E900405c64cbC
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
 ```
 

@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import { CoinbaseWalletProvider } from '@/components/providers/CoinbaseWalletProvider';
-import { CoinbaseConnectWallet } from '@/components/demo/CoinbaseConnectWallet';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { CoinbaseWalletProvider } from "@/components/providers/CoinbaseWalletProvider";
+import { CoinbaseConnectWallet } from "@/components/demo/CoinbaseConnectWallet";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function CoinbaseDemoPage() {
   return (
@@ -14,11 +20,10 @@ export default function CoinbaseDemoPage() {
           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
             Coinbase Smart Wallet Integration
           </Badge>
-          <h1 className="text-3xl font-bold">
-            Coinbase Wallet Demo
-          </h1>
+          <h1 className="text-3xl font-bold">Coinbase Wallet Demo</h1>
           <p className="text-gray-600 max-w-md mx-auto">
-            Demonstrate Coinbase Smart Wallet integration with ENS GiftBox for ETHGlobal judges
+            Demonstrate Coinbase Smart Wallet integration with EchoBox for
+            ETHGlobal judges
           </p>
         </div>
 
@@ -30,7 +35,8 @@ export default function CoinbaseDemoPage() {
               <span>Prize Category</span>
             </CardTitle>
             <CardDescription>
-              This demo showcases our integration for potential wallet-related prizes
+              This demo showcases our integration for potential wallet-related
+              prizes
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -49,7 +55,7 @@ export default function CoinbaseDemoPage() {
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Use Case:</span>
-                <span>ENS GiftBox Wallet Connection</span>
+                <span>EchoBox Wallet Connection</span>
               </div>
             </div>
           </CardContent>
@@ -67,11 +73,15 @@ export default function CoinbaseDemoPage() {
             <div className="space-y-3 text-sm">
               <div>
                 <span className="font-medium">SDK:</span>
-                <code className="ml-2 bg-gray-100 px-2 py-1 rounded">@coinbase/wallet-sdk</code>
+                <code className="ml-2 bg-gray-100 px-2 py-1 rounded">
+                  @coinbase/wallet-sdk
+                </code>
               </div>
               <div>
                 <span className="font-medium">Configuration:</span>
-                <code className="ml-2 bg-gray-100 px-2 py-1 rounded">smartWalletOnly: true</code>
+                <code className="ml-2 bg-gray-100 px-2 py-1 rounded">
+                  smartWalletOnly: true
+                </code>
               </div>
               <div>
                 <span className="font-medium">Features:</span>
@@ -79,7 +89,7 @@ export default function CoinbaseDemoPage() {
                   <li>• Isolated provider context</li>
                   <li>• Automatic network switching</li>
                   <li>• Smart wallet prioritization</li>
-                  <li>• ENS GiftBox integration ready</li>
+                  <li>• EchoBox integration ready</li>
                 </ul>
               </div>
             </div>
@@ -89,38 +99,51 @@ export default function CoinbaseDemoPage() {
         {/* Integration Status */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">ENS GiftBox Integration</CardTitle>
+            <CardTitle className="text-lg">EchoBox Integration</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-3 text-sm">
               <div className="flex items-center justify-between">
                 <span>Smart Contract Deployed</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">
+                <Badge
+                  variant="outline"
+                  className="text-green-600 border-green-600"
+                >
                   ✅ Ready
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>ENS Name Support</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">
+                <Badge
+                  variant="outline"
+                  className="text-green-600 border-green-600"
+                >
                   ✅ Ready
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>PYUSD Token Support</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">
+                <Badge
+                  variant="outline"
+                  className="text-green-600 border-green-600"
+                >
                   ✅ Ready
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Time-locked Gifts</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">
+                <Badge
+                  variant="outline"
+                  className="text-green-600 border-green-600"
+                >
                   ✅ Ready
                 </Badge>
               </div>
             </div>
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
               <p className="text-xs text-blue-700">
-                Contract Address: <code>0xb5aa12ccb861827a0d2daf47082780247a6d254e</code>
+                Contract Address:{" "}
+                <code>0xb5aa12ccb861827a0d2daf47082780247a6d254e</code>
               </p>
             </div>
           </CardContent>

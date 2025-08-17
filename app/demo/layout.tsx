@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowLeft, Gift } from 'lucide-react';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, Gift } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: 'ENS GiftBox - Wallet Demos',
-  description: 'Wallet integration demos for ETHGlobal judges',
+  title: "EchoBox - Wallet Demos",
+  description: "Wallet integration demos for ETHGlobal judges",
 };
 
 export default function DemoLayout({
@@ -30,24 +30,24 @@ export default function DemoLayout({
               <div className="flex items-center space-x-2">
                 <Gift className="h-6 w-6 text-purple-600" />
                 <h1 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  ENS GiftBox
+                  EchoBox
                 </h1>
                 <span className="text-sm text-gray-500">Demo Pages</span>
               </div>
             </div>
-            
+
             <div className="text-right">
               <div className="text-xs text-gray-500">ETHGlobal NY</div>
-              <div className="text-xs text-purple-600 font-medium">Judge Demo</div>
+              <div className="text-xs text-purple-600 font-medium">
+                Judge Demo
+              </div>
             </div>
           </div>
         </div>
       </header>
 
       {/* Demo Content */}
-      <main className="container mx-auto px-4 py-12">
-        {children}
-      </main>
+      <main className="container mx-auto px-4 py-12">{children}</main>
 
       {/* Demo Navigation */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">

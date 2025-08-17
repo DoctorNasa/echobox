@@ -12,7 +12,10 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "deploy": "hardhat run --network sepolia --config contracts/hardhat.config.ts scripts/deploy_v2.ts",
+    "verify": "hardhat verify --network sepolia --config contracts/hardhat.config.ts",
+    "flatten": "hardhat flatten --config contracts/hardhat.config.ts contracts/src/GiftBoxV2.sol"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.3.7",
@@ -60,6 +63,7 @@
     "react": "^18.2.0",
     "react-day-picker": "^9.8.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.62.0",
     "react-resizable-panels": "^3.0.4",
     "recharts": "^3.1.2",
@@ -88,6 +92,7 @@
     "postcss": "^8.4.33",
     "prettier": "^3.2.2",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vitest": "^1.2.1"
   },

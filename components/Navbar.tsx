@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Gift } from 'lucide-react';
-import { ConnectWallet } from './ConnectWalletPrivy';
+import React from "react";
+import { Gift } from "lucide-react";
+import { ConnectWallet } from "./ConnectWalletPrivy";
 
 export function Navbar() {
   return (
@@ -13,7 +13,7 @@ export function Navbar() {
           <div className="flex items-center">
             <Gift className="h-8 w-8 text-primary" />
             <h1 className="ml-2 text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              ENS GiftBox
+              EchoBox
             </h1>
             <span className="ml-2 text-sm text-muted-foreground hidden sm:inline">
               Time-locked crypto gifts with ENS
