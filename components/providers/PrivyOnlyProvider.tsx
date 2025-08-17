@@ -4,8 +4,9 @@ import React from "react";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { sepolia } from "viem/chains";
+import { mainnet, sepolia } from "viem/chains";
 import { http } from "viem";
+import { injected } from "wagmi/connectors";
 
 interface PrivyOnlyProviderProps {
   children: React.ReactNode;
@@ -13,8 +14,10 @@ interface PrivyOnlyProviderProps {
 
 // Create wagmi config for Privy demo
 const config = createConfig({
-  chains: [sepolia],
+  chains: [mainnet, sepolia],
+  connectors: [injected()],
   transports: {
+    [mainnet.id]: http(),
     [sepolia.id]: http(),
   },
 });
@@ -44,12 +47,7 @@ export function PrivyOnlyProvider({ children }: PrivyOnlyProviderProps) {
         },
         embeddedWallets: {
           createOnLogin: "users-without-wallets",
-          noPromptOnSignature: false,
         },
-        smartWallets: {
-          createOnLogin: "users-without-wallets",
-        },
-        modalSize: "compact",
         legal: {
           termsAndConditionsUrl: undefined,
           privacyPolicyUrl: undefined,

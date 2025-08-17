@@ -99,9 +99,9 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
   // Animation variants
   const cardVariants = {
     initial: { scale: 1, rotateY: 0 },
-    claiming: { 
+    claiming: {
       scale: 1.02,
-      transition: { 
+      transition: {
         duration: 0.3,
         repeat: Infinity,
         repeatType: "reverse" as const
@@ -110,9 +110,8 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
     success: {
       scale: 1.05,
       rotateY: 360,
-      transition: { 
-        duration: 0.8,
-        ease: "easeInOut"
+      transition: {
+        duration: 0.8
       }
     },
     idle: { scale: 1, rotateY: 0 }
@@ -125,8 +124,7 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
       scale: [0.8, 1.2, 1.4],
       transition: {
         duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
+        repeat: Infinity
       }
     }
   };
@@ -141,7 +139,6 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
       rotate: [0, 360],
       transition: {
         duration: 2,
-        ease: "easeOut",
         delay: i * 0.1
       }
     })
@@ -155,7 +152,6 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
       rotate: [0, 180, 360],
       transition: {
         duration: 1.5,
-        ease: "easeInOut",
         repeat: Infinity,
         repeatDelay: 0.5
       }

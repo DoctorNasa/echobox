@@ -41,7 +41,6 @@ export function CoinbaseWalletProvider({
       appName: "EchoBox",
       appLogoUrl:
         "https://i.postimg.cc/VzYzhXL8/Chat-GPT-Image-16-2568-16-43-31.png",
-      darkMode: false,
     });
 
     const provider = sdk.makeWeb3Provider({
@@ -53,11 +52,12 @@ export function CoinbaseWalletProvider({
     // Check if already connected
     provider
       .request({ method: "eth_accounts" })
-      .then((accounts: string[]) => {
-        if (accounts.length > 0) {
+      .then((accounts) => {
+        const accountsArray = accounts as string[];
+        if (accountsArray.length > 0) {
           setWallet({
             isConnected: true,
-            address: accounts[0],
+            address: accountsArray[0],
             isConnecting: false,
           });
         }
