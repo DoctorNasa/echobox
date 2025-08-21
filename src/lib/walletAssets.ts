@@ -10,6 +10,7 @@ import type {
   FetchAssetsOptions,
 } from '../types/wallet';
 import { DEFAULT_TOKEN_LIST } from '../types/wallet';
+import { getTokenListForChain } from './constants';
 
 // ERC1155 ABI for balance checking
 const erc1155Abi = [
@@ -109,7 +110,7 @@ export async function fetchERC20Balance(
     // Try to get metadata
     let name = '';
     let symbol = '';
-    
+
     try {
       [name, symbol] = await Promise.all([
         readContract(config, {
@@ -140,7 +141,12 @@ export async function fetchERC20Balance(
       },
     };
   } catch (error) {
-    console.error(`Error fetching ERC20 balance for ${tokenAddress}:`, error);
+    // Check if it's a contract execution error (contract doesn't exist or wrong network)
+    if (error instanceof Error && error.message.includes('returned no data')) {
+      console.warn(`Token contract ${tokenAddress} may not exist on the current network or is not a valid ERC20 contract`);
+    } else {
+      console.error(`Error fetching ERC20 balance for ${tokenAddress}:`, error);
+    }
     return null;
   }
 }
@@ -150,10 +156,24 @@ export async function fetchERC20Balance(
  */
 export async function fetchERC20Balances(
   walletAddress: Address,
-  tokenList: Address[] = DEFAULT_TOKEN_LIST.map(t => t.address)
+  chainId?: number,
+  tokenList?: Address[]
 ): Promise<ERC20Asset[]> {
-  const balancePromises = tokenList.map(async (tokenAddress, index) => {
-    const decimals = DEFAULT_TOKEN_LIST[index]?.decimals || 18;
+  // Use network-specific token list if chainId is provided, otherwise fall back to provided list or default
+  let tokensToCheck: Address[];
+  let tokenMetadata: { address: Address; decimals: number }[];
+
+  if (chainId && !tokenList) {
+    const networkTokens = getTokenListForChain(chainId);
+    tokensToCheck = networkTokens.map(t => t.address).filter(addr => addr !== null) as Address[];
+    tokenMetadata = networkTokens.map(t => ({ address: t.address as Address, decimals: t.decimals }));
+  } else {
+    tokensToCheck = tokenList || DEFAULT_TOKEN_LIST.map(t => t.address);
+    tokenMetadata = DEFAULT_TOKEN_LIST;
+  }
+
+  const balancePromises = tokensToCheck.map(async (tokenAddress, index) => {
+    const decimals = tokenMetadata.find(t => t.address === tokenAddress)?.decimals || 18;
     return fetchERC20Balance(walletAddress, tokenAddress, decimals);
   });
 
@@ -317,9 +337,8 @@ export async function fetchWalletAssets(
   }
 
   if (includeERC20) {
-    const tokensToCheck = tokenList || DEFAULT_TOKEN_LIST.map(t => t.address);
     promises.push(
-      fetchERC20Balances(walletAddress, tokensToCheck).then(
+      fetchERC20Balances(walletAddress, chainId, tokenList).then(
         (erc20) => (assets.erc20 = erc20)
       )
     );

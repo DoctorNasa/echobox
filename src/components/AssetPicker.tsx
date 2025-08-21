@@ -2,9 +2,10 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { AssetType, NFTInput, TokenMeta, SelectedAsset } from "../types/asset";
-import { TOKEN_LIST } from "../lib/constants";
+import { getTokenListForChain } from "../lib/constants";
 import useAssetPrice from "../hooks/useAssetPrice";
 import { cn } from "../lib/utils";
+import { useChainId } from "wagmi";
 
 type Props = {
   onChange: (asset: SelectedAsset) => void;
@@ -12,12 +13,15 @@ type Props = {
 };
 
 export default function AssetPicker({ onChange, defaultType = "ETH" }: Props) {
+  const chainId = useChainId();
+  const tokenList = getTokenListForChain(chainId);
+
   const [type, setType] = useState<AssetType>(defaultType);
-  const [selectedToken, setSelectedToken] = useState<TokenMeta | undefined>(TOKEN_LIST[0]);
+  const [selectedToken, setSelectedToken] = useState<TokenMeta | undefined>(tokenList[0]);
   const [amount, setAmount] = useState<string>("");
-  const [nft, setNft] = useState<NFTInput>({ 
-    standard: "ERC721", 
-    address: "0x0000000000000000000000000000000000000000", 
+  const [nft, setNft] = useState<NFTInput>({
+    standard: "ERC721",
+    address: "0x0000000000000000000000000000000000000000",
     tokenId: "",
     amount: "1"
   });
@@ -44,17 +48,17 @@ export default function AssetPicker({ onChange, defaultType = "ETH" }: Props) {
 
   const handleTypeChange = (newType: AssetType) => {
     setType(newType);
-    
+
     // Reset form when changing type
     if (newType === "ETH") {
-      setSelectedToken(TOKEN_LIST[0]); // ETH
+      setSelectedToken(tokenList[0]); // ETH
       setAmount("");
     } else if (newType === "ERC20") {
-      const firstToken = TOKEN_LIST.find(t => t.address !== null) || TOKEN_LIST[1];
+      const firstToken = tokenList.find(t => t.address !== null) || tokenList[1];
       setSelectedToken(firstToken);
       setAmount("");
     }
-    
+
     emit({ type: newType });
   };
 
@@ -109,7 +113,7 @@ export default function AssetPicker({ onChange, defaultType = "ETH" }: Props) {
                 Select Token
               </label>
               <div className="grid gap-2">
-                {TOKEN_LIST.filter(t => t.address !== null).map((token) => (
+                {tokenList.filter(t => t.address !== null).map((token) => (
                   <button
                     key={token.symbol}
                     onClick={() => handleTokenSelect(token)}

@@ -91,7 +91,7 @@ export const DEFAULT_TOKEN_LIST: { address: Address; symbol: string; decimals: n
   { address: '0x6B175474E89094C44Da98b954EedeAC495271d0F', symbol: 'DAI', decimals: 18 },
   { address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', symbol: 'WBTC', decimals: 8 },
   { address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', symbol: 'WETH', decimals: 18 },
-  { address: '0x6c08B3fD93Dbc7E7bee031BFC4C7366D3c80e9CA', symbol: 'PYUSD', decimals: 6 },
-  
+  { address: '0x6c3ea9036406852006290770BEdFcAbA0e23A0e8', symbol: 'PYUSD', decimals: 6 }, // Correct mainnet PYUSD
+
   // Add more popular tokens as needed
 ];

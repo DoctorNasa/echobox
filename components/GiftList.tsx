@@ -1,78 +1,25 @@
-import React, { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import React, { useMemo } from "react";
+import { Card, CardContent } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { GiftCard } from "./GiftCard";
-import { GiftWithStatus, GiftStatus } from "../types/gift";
-import { Gift, Send, Inbox, Package } from "lucide-react";
-import { toast } from "sonner";
+import { GiftStatus } from "../types/gift";
+import { Send, Inbox, Package, Loader2 } from "lucide-react";
+import { useGifts } from "../src/hooks/useGifts";
 
 interface GiftListProps {
   userAddress: string;
 }
 
-// Mock gift data - in production, this would come from smart contract queries
-const mockGifts: GiftWithStatus[] = [
-  {
-    id: "0x1234567890123456",
-    sender: "0x742d35Cc6cC00532e7D9A0f7e3B1234567890123",
-    recipient: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
-    unlockTimestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
-    claimed: false,
-    assetType: 0, // ETH
-    token: "0x0000000000000000000000000000000000000000",
-    tokenId: "0",
-    amount: "0.5",
-    recipientENS: "alice.eth",
-    message: "Happy birthday! Hope you have an amazing day!",
-    createdAt: Math.floor(Date.now() / 1000) - 3600, // 1 hour ago
-    status: GiftStatus.PENDING,
-  },
-  {
-    id: "0x2345678901234567",
-    sender: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
-    recipient: "0x742d35Cc6cC00532e7D9A0f7e3B1234567890123",
-    unlockTimestamp: Math.floor(Date.now() / 1000) - 3600, // 1 hour ago
-    claimed: false,
-    assetType: 1, // ERC20
-    token: "0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9",
-    tokenId: "0",
-    amount: "0.1",
-    recipientENS: "bob.eth",
-    message: "Thanks for helping me with the project!",
-    createdAt: Math.floor(Date.now() / 1000) - 86400, // 1 day ago
-    status: GiftStatus.CLAIMABLE,
-  },
-  {
-    id: "0x3456789012345678",
-    sender: "0x742d35Cc6cC00532e7D9A0f7e3B1234567890123",
-    recipient: "0x1234567890123456789012345678901234567890",
-    unlockTimestamp: Math.floor(Date.now() / 1000) - 86400 * 2, // 2 days ago
-    claimed: true,
-    assetType: 2, // ERC721
-    token: "0x1234567890123456789012345678901234567890",
-    tokenId: "42",
-    amount: "1",
-    recipientENS: "charlie.eth",
-    message: "Congratulations on your graduation!",
-    createdAt: Math.floor(Date.now() / 1000) - 86400 * 7, // 1 week ago
-    status: GiftStatus.CLAIMED,
-  },
-];
-
 export function GiftList({ userAddress }: GiftListProps) {
-  const [claimingGifts, setClaimingGifts] = useState<Set<string>>(new Set());
-
-  // Filter gifts based on user role
-  const { sentGifts, receivedGifts } = useMemo(() => {
-    const sent = mockGifts.filter(
-      (gift) => gift.sender.toLowerCase() === userAddress.toLowerCase(),
-    );
-    const received = mockGifts.filter(
-      (gift) => gift.recipient.toLowerCase() === userAddress.toLowerCase(),
-    );
-
-    return { sentGifts: sent, receivedGifts: received };
-  }, [userAddress]);
+  // Use the blockchain hook to fetch real gift data
+  const {
+    sentGifts,
+    receivedGifts,
+    isLoading,
+    error,
+    claimGift,
+    isClaimingGift,
+  } = useGifts();
 
   // Count gifts by status
   const giftCounts = useMemo(() => {
@@ -88,38 +35,34 @@ export function GiftList({ userAddress }: GiftListProps) {
     };
   }, [sentGifts, receivedGifts]);
 
-  const handleClaimGift = async (giftId: string) => {
-    setClaimingGifts((prev) => new Set(prev).add(giftId));
+  // Handle loading state
+  if (isLoading && sentGifts.length === 0 && receivedGifts.length === 0) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-4" />
+          <p className="text-muted-foreground">Loading gifts from blockchain...</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
-    try {
-      // Mock claiming delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // In production, this would call the smart contract's claimGift function
-      console.log(`Claiming gift ${giftId}`);
-
-      // Update mock data (in production, this would be handled by wagmi query invalidation)
-      const giftIndex = mockGifts.findIndex((g) => g.id === giftId);
-      if (giftIndex !== -1) {
-        mockGifts[giftIndex] = {
-          ...mockGifts[giftIndex],
-          claimed: true,
-          status: GiftStatus.CLAIMED,
-        };
-      }
-
-      toast.success("🎉 Gift claimed successfully! 🎊\nCelebration time!");
-    } catch (error) {
-      console.error("Failed to claim gift:", error);
-      throw error;
-    } finally {
-      setClaimingGifts((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(giftId);
-        return newSet;
-      });
-    }
-  };
+  // Handle error state
+  if (error && !sentGifts.length && !receivedGifts.length) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Package className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="mb-2">Unable to load gifts</h3>
+          <p className="text-center text-muted-foreground mb-6">
+            {process.env.NODE_ENV === 'development' 
+              ? 'Using mock data. Deploy the smart contract to see real data.'
+              : 'Please check your connection and try again.'}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (sentGifts.length === 0 && receivedGifts.length === 0) {
     return (
@@ -199,7 +142,7 @@ export function GiftList({ userAddress }: GiftListProps) {
                   key={gift.id}
                   gift={gift}
                   isRecipient={true}
-                  onClaim={handleClaimGift}
+                  onClaim={claimGift}
                 />
               ))}
             </div>

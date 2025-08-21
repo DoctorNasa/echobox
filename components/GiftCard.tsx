@@ -6,6 +6,8 @@ import { Gift, Clock, CheckCircle, Loader2, ExternalLink, Sparkles } from 'lucid
 import { motion, AnimatePresence } from 'motion/react';
 import { GiftWithStatus, GiftStatus } from '../types/gift';
 import { FireworkCelebration } from './FireworkCelebration';
+import { blockchainService } from '../src/services/blockchain';
+import { toast } from 'sonner';
 
 interface GiftCardProps {
   gift: GiftWithStatus;
@@ -91,6 +93,22 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
       console.error('Failed to claim gift:', error);
     } finally {
       setIsClaiming(false);
+    }
+  };
+
+  const handleViewOnEtherscan = async () => {
+    try {
+      const etherscanUrl = await blockchainService.getGiftEtherscanUrl(gift.id);
+      if (etherscanUrl) {
+        window.open(etherscanUrl, '_blank');
+      } else {
+        // Fallback to contract address page
+        const fallbackUrl = blockchainService.getEtherscanUrl('0x' + gift.id.slice(2));
+        window.open(fallbackUrl, '_blank');
+      }
+    } catch (error) {
+      console.error('Error opening Etherscan:', error);
+      toast.error('Failed to open Etherscan');
     }
   };
 
@@ -295,7 +313,7 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
               transition={{ duration: 1 }}
             >
               <div className="text-2xl text-primary mb-1">
-                {gift.amount} ETH
+                {blockchainService.formatAmount(gift.amount, gift.assetType, gift.token)}
               </div>
               <div className="text-sm text-muted-foreground">
                 ≈ ${(parseFloat(gift.amount) * 2500).toFixed(2)} USD {/* Mock ETH price */}
@@ -383,7 +401,11 @@ export function GiftCard({ gift, isRecipient, onClaim }: GiftCardProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleViewOnEtherscan}
+                >
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View on Etherscan
                 </Button>

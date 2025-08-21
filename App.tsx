@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import { WalletProvider } from './components/WalletProvider';
 import { Navbar } from './components/Navbar';
 import { GiftForm } from './components/GiftForm';
-import { GiftList } from './components/GiftList';
+import { GiftDashboard } from './components/GiftDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Toaster } from './components/ui/sonner';
 import { Gift, List } from 'lucide-react';
 import { CreateGiftParams } from './types/gift';
-
-// Mock user address - in production, this would come from wagmi
-const MOCK_USER_ADDRESS = '0x742d35Cc6cC00532e7D9A0f7e3B1234567890123';
 
 function EchoBoxApp() {
   const [activeTab, setActiveTab] = useState('create');
@@ -54,7 +51,7 @@ function EchoBoxApp() {
           </TabsContent>
 
           <TabsContent value="gifts">
-            <GiftList userAddress={MOCK_USER_ADDRESS} />
+            <GiftDashboard />
           </TabsContent>
         </Tabs>
 

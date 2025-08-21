@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { formatEther, parseEther, formatUnits } from 'viem';
 import {
   Wallet,
   Coins,
@@ -21,6 +21,7 @@ import { toast } from 'sonner';
 import { parseCSV } from '../lib/csvParser';
 import { BulkGiftEntry } from '../types/bulkGift';
 import { useWalletNFTs } from '../hooks/useWalletNFTs';
+import { useWalletAssets } from '../hooks/useWalletAssets';
 
 interface AssetSelectorProps {
   onAssetSelect?: (asset: any) => void;
@@ -38,6 +39,14 @@ export function WalletAssetSelector({
   const { address, isConnected } = useAccount();
   const { data: balance } = useBalance({ address });
   const { nfts, loading: nftsLoading, error: nftsError } = useWalletNFTs();
+  
+  // Fetch wallet assets including ERC20 tokens
+  const { assets, isLoading: assetsLoading } = useWalletAssets({
+    includeNative: true,
+    includeERC20: true,
+    includeNFTs: false,
+    enabled: isConnected
+  });
   const [selectedType, setSelectedType] = useState<AssetType>('tokens');
   const [selectedAsset, setSelectedAsset] = useState<any>(null);
   const [bulkFile, setBulkFile] = useState<File | null>(null);
@@ -194,30 +203,60 @@ export function WalletAssetSelector({
             </div>
           </button>
 
-          {/* Other Tokens (Mock) */}
-          <button
-            onClick={() => handleAssetSelect({ type: 'USDC', balance: '1000' })}
-            className={cn(
-              "w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all",
-              selectedAsset?.type === 'USDC'
-                ? "border-purple-500 bg-purple-50"
-                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-            )}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-blue-600 font-bold">$</span>
-              </div>
-              <div className="text-left">
-                <p className="font-semibold">USDC</p>
-                <p className="text-sm text-gray-500">Stablecoin</p>
+          {/* ERC20 Tokens */}
+          {assetsLoading && (
+            <div className="text-center py-4">
+              <div className="inline-flex items-center gap-2 text-gray-500">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-600"></div>
+                <span>Loading tokens...</span>
               </div>
             </div>
-            <div className="text-right">
-              <p className="font-mono font-semibold">1,000.00 USDC</p>
-              <p className="text-xs text-gray-500">Available</p>
+          )}
+          
+          {!assetsLoading && assets?.erc20 && assets.erc20.map((token) => (
+            <button
+              key={token.address}
+              onClick={() => handleAssetSelect({ 
+                type: 'ERC20', 
+                address: token.address,
+                balance: token.balance,
+                decimals: token.decimals,
+                symbol: token.metadata?.symbol || 'TOKEN',
+                name: token.metadata?.name || 'Unknown Token'
+              })}
+              className={cn(
+                "w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all",
+                selectedAsset?.address === token.address
+                  ? "border-purple-500 bg-purple-50"
+                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold">
+                    {(token.metadata?.symbol || 'T').slice(0, 2).toUpperCase()}
+                  </span>
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold">{token.metadata?.symbol || 'Unknown'}</p>
+                  <p className="text-sm text-gray-500">{token.metadata?.name || 'ERC20 Token'}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-mono font-semibold">
+                  {formatUnits(token.balance, token.decimals)} {token.metadata?.symbol || 'TOKEN'}
+                </p>
+                <p className="text-xs text-gray-500">Available</p>
+              </div>
+            </button>
+          ))}
+          
+          {!assetsLoading && (!assets?.erc20 || assets.erc20.length === 0) && (
+            <div className="text-center py-4 text-gray-500">
+              <p className="text-sm">No ERC20 tokens found</p>
+              <p className="text-xs mt-1">Make sure you have tokens in your wallet</p>
             </div>
-          </button>
+          )}
         </div>
       )}
 
